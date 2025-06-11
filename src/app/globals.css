@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+:root {
+  /* Custom Blues (inspired by Tailwind's blue palette) */
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-200: #bfdbfe;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-blue-800: #1e40af;
+  --color-blue-900: #1e3a8a;
+  --color-blue-950: #172554;
+
+  /* Custom Reds (for errors) */
+  --color-red-600: #dc2626;
+  /* Custom Greens (for success) */
+  --color-green-700: #047857;
+
+  /* General Colors */
+  --background: var(--color-blue-50);
+  --foreground: var(--color-blue-900);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: var(--color-blue-995);
+    --foreground: var(--color-blue-100);
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-blue-950); /* Koyu başlıklar */
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+/* Linkler ve Butonlar için temel stiller */
+a {
+  color: var(--color-blue-700);
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Bazı özel sınıfları yeni renk değişkenlerine göre güncelle */
+.bg-gradient-to-b.from-blue-100.via-white.to-blue-50 {
+  --tw-gradient-from: var(--color-blue-50);
+  --tw-gradient-to: var(--color-blue-100);
+  --tw-gradient-via: #ffffff;
+}
+
+.border-blue-100 {
+  border-color: var(--color-blue-100);
+}
+
+.text-blue-900 {
+  color: var(--color-blue-900);
+}
+
+.text-blue-700 {
+  color: var(--color-blue-700);
+}
+
+.hover\:bg-blue-50:hover {
+  background-color: var(--color-blue-50);
+}
+
+.bg-blue-700 {
+  background-color: var(--color-blue-700);
+}
+
+.hover\:bg-blue-800:hover {
+  background-color: var(--color-blue-800);
+}
+
+.text-red-600 {
+  color: var(--color-red-600);
+}
+
+.text-green-700 {
+  color: var(--color-green-700);
+}
+
+.focus\:ring-blue-300:focus {
+  --tw-ring-color: var(--color-blue-300);
+}
+
+.bg-blue-950 {
+  background-color: var(--color-blue-950);
+}
+
+.text-blue-200 {
+  color: var(--color-blue-200);
+}
+
+.text-blue-300 {
+  color: var(--color-blue-300);
+}
