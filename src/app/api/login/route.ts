@@ -31,13 +31,9 @@ export async function POST(req: NextRequest) {
       user: { id: user.id, name: user.name, email: user.email, role: user.role } 
     });
 
-    // Cookie ayarları (Set-Cookie header üzerinden)
-    const cookieHeader = [
-      `userId=${user.id}; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`,
-      `userRole=${user.role}; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`
-    ].join(", ");
-
-    response.headers.set("Set-Cookie", cookieHeader);
+    // Next.js 13+ için cookie'leri bu şekilde ayarlayın
+    response.cookies.set("userId", user.id, { path: "/", httpOnly: true, sameSite: "lax", maxAge: 604800 });
+    response.cookies.set("userRole", user.role, { path: "/", httpOnly: true, sameSite: "lax", maxAge: 604800 });
 
     return response;
   } catch (error) {

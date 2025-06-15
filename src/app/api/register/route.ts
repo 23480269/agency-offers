@@ -19,18 +19,18 @@ export async function POST(req: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Kullanıcıyı oluştur
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
         // rol: varsayılan olarak USER (enum)
       },
-      select: { id: true, name: true, email: true, role: true, createdAt: true },
     });
 
-    return NextResponse.json({ user, message: "Kayıt başarılı!" }, { status: 201 });
+    // Kayıt sonrası kullanıcıyı login sayfasına yönlendir
+    return NextResponse.redirect("/login");
   } catch (error) {
     return NextResponse.json({ error: "Sunucu hatası." }, { status: 500 });
   }
-} 
+}
