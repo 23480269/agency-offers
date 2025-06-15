@@ -39,31 +39,28 @@ export async function GET(
 // İşleyici fonksiyonunun ikinci argümanını, 'params' nesnesi doğrudan alınacak şekilde güncelledik.
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } } // Parametreleri burada doğrudan tiplendirin
+  context: Promise<{ params: { id: string } }>
 ) {
   try {
+    const { params } = await context;
     const data = await request.json();
-    const { status } = data; // İstek gövdesinden 'status' bilgisini al
+    const { status } = data;
 
-    // Prisma kullanarak teklifi güncelle
     const offer = await prisma.offer.update({
       where: {
-        id: params.id, // URL parametresinden gelen ID'yi kullan
+        id: params.id,
       },
       data: {
-        status, // 'status' alanını güncelle
+        status,
       },
     });
 
-    console.log(`Teklif ID'si için PUT isteği alındı: ${params.id} veriyle birlikte:`, data); // Konsol çıktısı Türkçe
-
-    // Güncellenmiş teklifi JSON olarak döndür
     return NextResponse.json(offer);
   } catch (error) {
-    console.error("Teklif güncellenirken bir hata oluştu:", error); // Hata konsol çıktısı Türkçe
+    console.error("Error updating offer:", error);
     return NextResponse.json(
-      { error: "Teklif güncellenirken bir hata oluştu" }, // Hata mesajı Türkçe
-      { status: 500 } // HTTP 500 status kodu
+      { error: "Teklif güncellenirken bir hata oluştu" },
+      { status: 500 }
     );
   }
 }

@@ -11,7 +11,7 @@ interface ContactMessage {
   createdAt: string;
 }
 
-export default function AdminFeedbackPage() {
+export default function AdminContactMessagesPage() {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,14 +40,16 @@ export default function AdminFeedbackPage() {
 
   const fetchMessages = async () => {
     try {
-      const response = await fetch("/api/admin/feedback");
+      const response = await fetch("/api/admin/feedback", {
+        credentials: "include"
+      });
       if (!response.ok) {
-        throw new Error("Geri bildirimler yüklenemedi");
+        throw new Error("İletişim mesajları yüklenemedi");
       }
       const data = await response.json();
       setMessages(data);
     } catch (error) {
-      setError("Geri bildirimler yüklenirken bir hata oluştu");
+      setError("İletişim mesajları yüklenirken bir hata oluştu");
       console.error("Fetch error:", error);
     } finally {
       setIsLoading(false);
@@ -55,23 +57,24 @@ export default function AdminFeedbackPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm("Bu geri bildirimi silmek istediğinizden emin misiniz?")) {
+    if (!confirm("Bu iletişim mesajını silmek istediğinizden emin misiniz?")) {
       return;
     }
 
     try {
-      const response = await fetch(`/api/admin/feedback/${id}`, {
+      const response = await fetch(`/api/admin/feedback?id=${id}`, {
         method: "DELETE",
+        credentials: "include"
       });
 
       if (!response.ok) {
-        throw new Error("Geri bildirim silinemedi");
+        throw new Error("İletişim mesajı silinemedi");
       }
 
       setMessages(messages.filter(message => message.id !== id));
     } catch (error) {
       console.error("Delete error:", error);
-      alert("Geri bildirim silinirken bir hata oluştu");
+      alert("İletişim mesajı silinirken bir hata oluştu");
     }
   };
 
@@ -99,11 +102,11 @@ export default function AdminFeedbackPage() {
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Geri Bildirimler</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">İletişim Mesajları</h1>
           
           {messages.length === 0 ? (
             <div className="text-center text-gray-500 py-8">
-              Henüz geri bildirim bulunmuyor
+              Henüz iletişim mesajı bulunmuyor
             </div>
           ) : (
             <div className="space-y-6">
@@ -153,4 +156,4 @@ export default function AdminFeedbackPage() {
       </div>
     </div>
   );
-} 
+}

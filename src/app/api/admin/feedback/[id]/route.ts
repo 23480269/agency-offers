@@ -2,13 +2,13 @@
 
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma"; // '@/lib/prisma' dosyanızda dışa aktardığınız PrismaClient instance'ı
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth"; // '@/lib/auth' dosyanızda dışa aktardığınız NextAuth seçenekleri
 
 // GET isteği: Tüm geri bildirim mesajlarını getirir
 export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession({ req: request, ...authOptions });
 
     // Kullanıcının oturum açmış ve ADMIN rolüne sahip olup olmadığını kontrol et
     if (!session || !session.user || session.user.role !== "ADMIN") {
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
 // Eğer DELETE'i '/api/admin/feedback/[id]/route.ts' ayrı bir dosyada tutsaydınız, 'params' doğrudan gelirdi.
 export async function DELETE(request: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession({ req: request, ...authOptions });
 
     // Kullanıcının ADMIN olup olmadığını kontrol et
     if (!session || !session.user || session.user.role !== "ADMIN") {

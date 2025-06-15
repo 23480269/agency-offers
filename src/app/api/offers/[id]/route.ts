@@ -9,7 +9,7 @@ export async function PATCH(
 ) {
   try {
     const { status } = await request.json();
-    const id = parseInt(params.id);
+    const id = params.id;
 
     if (!status || !['APPROVED', 'REJECTED'].includes(status)) {
       return NextResponse.json(
@@ -31,4 +31,4 @@ export async function PATCH(
       { status: 500 }
     );
   }
-} 
+}

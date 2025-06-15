@@ -5,7 +5,7 @@ import React, { useState } from "react";
 interface ProfileFormProps {
   initialName: string;
   initialEmail: string;
-  userId: number;
+  userId: string;
 }
 
 export default function ProfileForm({ initialName, initialEmail, userId }: ProfileFormProps) {

@@ -45,9 +45,10 @@ export default async function ProfilePage({
       <a href="/logout" className="inline-block mt-8 text-blue-700 font-semibold hover:underline transition-colors text-lg">Çıkış Yap</a>
       <hr className="my-10 border-blue-200" />
       <ProfileForm initialName={user.name} initialEmail={user.email} userId={user.id} />
+      {/* <ChatList /> */}
       {/* <hr className="my-10 border-blue-200" />
       <OfferForm userId={user.id} defaultOpen={showOfferForm} />
       <OfferList userId={user.id} /> */}
     </div>
   );
-} 
+}

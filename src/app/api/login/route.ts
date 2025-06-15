@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
     }
 
     console.log("Login successful for user:", user.id, user.email, "Role:", user.role);
+    console.log("User ID before setting cookie:", user.id);
 
     const response = NextResponse.json({ 
       success: true,

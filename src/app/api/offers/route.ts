@@ -32,25 +32,13 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
 
-    const whereClause: { order?: { id?: number } } = {};
-    // If userId is provided, filter offers by orders associated with that user.
-    // Note: This assumes a relationship between User and Order, and Order and Offer.
-    // For a direct filter by user, you might need a userId field on the Offer model,
-    // or fetch orders first and then filter offers by those order IDs.
-    // Given the current schema, filtering by order associated with a user would be complex here.
-    // We will assume for now that if userId is passed, it's actually the orderId we want to filter by
-    // This needs to be clarified by the user or schema adjusted.
+    let whereClause: any = {};
     if (userId) {
-      // This is a temporary assumption. userId in the query string is actually orderId from the previous context
-      // as per `OfferList.tsx` trying to fetch `/api/offers?userId=${userId}` where userId is actually orderId in context of the offer.
-      whereClause.order = { id: parseInt(userId, 10) };
+      whereClause.orderId = parseInt(userId, 10);
     }
 
     const offers = await prisma.offer.findMany({
       where: whereClause,
-      include: {
-        order: true,
-      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -64,4 +52,4 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
-} 
+}
