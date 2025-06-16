@@ -108,7 +108,9 @@ export default function ServicesPage() {
         <div className="fixed inset-0 bg-gray-900 bg-opacity-75 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-xl p-8 max-w-md w-full">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">{selectedPackage} için Teklif Al</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {packages.find((p) => p.name === selectedPackage)?.name || selectedPackage} için Teklif Al
+              </h2>
               <button onClick={() => setSelectedPackage(null)} className="text-gray-500 hover:text-gray-700">✕</button>
             </div>
             {submitStatus === "success" ? (
