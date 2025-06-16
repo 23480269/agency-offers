@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,25 +20,19 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
     setMessage("");
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setMessage("Başarıyla giriş yapıldı, yönlendiriliyorsunuz...");
-        router.replace("/");
-        router.refresh();
-      } else {
-        setError(data.error || "Giriş başarısız");
-      }
-    } catch (err) {
-      setError("Bir hata oluştu");
-    } finally {
-      setLoading(false);
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: form.email,
+      password: form.password,
+    });
+    if (res?.ok) {
+      setMessage("Başarıyla giriş yapıldı, yönlendiriliyorsunuz...");
+      router.replace("/");
+      router.refresh();
+    } else {
+      setError("Giriş başarısız");
     }
+    setLoading(false);
   };
 
   return (
