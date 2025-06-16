@@ -41,7 +41,6 @@ export default function OfferList({ userId }: OfferListProps) {
         <ul className="space-y-2">
           {offers.map((offer) => (
             <li key={offer.id} className="border rounded p-3 bg-gray-50">
-              <div className="font-semibold">Teklif Fiyatı: {offer.price} TL</div>
               <div className="text-sm text-gray-700 mb-1">Mesaj: {offer.message}</div>
               <div className="text-xs text-gray-500">Durum: {offer.status} | {new Date(offer.createdAt).toLocaleString()}</div>
             </li>
