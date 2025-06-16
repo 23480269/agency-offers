@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   try {
-    const cookieStore = cookies();  // await kaldırıldı
-    const userId = cookieStore.get("userId")?.value;
-    const userRole = cookieStore.get("userRole")?.value;
-
-    console.log("Auth Status Check: userId=", userId, "userRole=", userRole);
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
+    const userRole = session?.user?.role;
 
     if (userId && userRole) {
       return NextResponse.json({ isAuthenticated: true, userId, userRole });
