@@ -11,6 +11,7 @@ export default function Header() {
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const { data: session, status } = useSession();
+  console.log('HEADER SESSION:', session, status);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
