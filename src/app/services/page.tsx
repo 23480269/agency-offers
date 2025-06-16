@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface ServicePackage {
   id: number;
@@ -25,13 +26,30 @@ export default function ServicesPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     fetch("/api/admin/services")
       .then((res) => res.json())
       .then((data) => setPackages(data))
       .catch(() => setPackages([]));
+    // Kullanıcı oturum kontrolü
+    fetch("/api/auth-status")
+      .then((res) => res.json())
+      .then((data) => setIsAuthenticated(data.isAuthenticated))
+      .catch(() => setIsAuthenticated(false));
   }, []);
+
+  const handleTeklifClick = (pkgName: string) => {
+    if (!isAuthenticated) {
+      router.push("/login");
+      return;
+    }
+    setFormData({ name: "", email: "", phone: "", company: "", message: "" });
+    setSubmitStatus(null);
+    setSelectedPackage(pkgName);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,11 +95,7 @@ export default function ServicesPage() {
             </ul>
             <button
               type="button"
-              onClick={() => {
-                setFormData({ name: "", email: "", phone: "", company: "", message: "" });
-                setSubmitStatus(null);
-                setSelectedPackage(pkg.name);
-              }}
+              onClick={() => handleTeklifClick(pkg.name)}
               className="bg-blue-700 text-white px-6 py-2 rounded-full font-semibold shadow transition w-full text-center hover:bg-blue-800"
             >
               {pkg.cta}
