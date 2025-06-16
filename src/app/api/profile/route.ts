@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
-import { cookies } from "next/headers";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 
 export async function PATCH(req: NextRequest) {
   try {
-    const cookieStore = cookies();
-    const userId = (await cookieStore).get("userId")?.value;
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
 
     if (!userId) {
       return NextResponse.json({ error: "Yetkisiz erişim." }, { status: 401 });
@@ -24,12 +25,12 @@ export async function PATCH(req: NextRequest) {
       where: { email: email },
     });
 
-    if (existingUserWithEmail && existingUserWithEmail.id !== Number(userId)) {
+    if (existingUserWithEmail && String(existingUserWithEmail.id) !== String(userId)) {
       return NextResponse.json({ error: "Bu e-posta başka bir kullanıcı tarafından kullanılıyor." }, { status: 409 });
     }
 
     const updatedUser = await prisma.user.update({
-      where: { id: Number(userId) },
+      where: { id: userId },
       data: { name, email },
       select: { id: true, name: true, email: true, role: true, createdAt: true },
     });
@@ -39,4 +40,4 @@ export async function PATCH(req: NextRequest) {
     console.error("Profil güncelleme hatası:", error);
     return NextResponse.json({ error: "Sunucu hatası." }, { status: 500 });
   }
-} 
+}
