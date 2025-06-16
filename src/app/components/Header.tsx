@@ -2,41 +2,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Header() {
   const pathname = usePathname();
-  const [user, setUser] = useState<{ id: number; role: string } | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLoadingUser, setIsLoadingUser] = useState(true);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    const fetchUserStatus = async () => {
-      setIsLoadingUser(true);
-      try {
-        const res = await fetch("/api/auth-status");
-        if (res.ok) {
-          const data = await res.json();
-          if (data.isAuthenticated) {
-            setUser({ id: data.userId, role: data.userRole });
-          } else {
-            setUser(null);
-          }
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.error("Auth status fetch error:", error);
-        setUser(null);
-      } finally {
-        setIsLoadingUser(false);
-      }
-    };
-
-    fetchUserStatus();
-  }, [pathname]);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -65,10 +39,7 @@ export default function Header() {
           <Link href="/services" className="hover:text-blue-700 font-bold text-blue-900 transition-colors">Paketler</Link>
           <Link href="/about" className="hover:text-blue-700 font-bold text-blue-900 transition-colors">Hakkımızda</Link>
           <Link href="/contact" className="hover:text-blue-700 font-bold text-blue-900 transition-colors">Bize Ulaşın</Link>
-          <div
-            className="relative"
-            ref={menuRef}
-          >
+          <div className="relative" ref={menuRef}>
             <button
               ref={buttonRef}
               className="flex items-center gap-2 px-5 py-2.5 rounded-lg hover:bg-blue-100 border border-blue-200 text-blue-800 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-300 transition-colors shadow-sm"
@@ -80,31 +51,28 @@ export default function Header() {
               <span className="text-lg">💻</span> Hesabım
             </button>
             {menuOpen && (
-              <div
-                className="absolute right-0 mt-2 w-48 bg-white border border-blue-200 rounded-lg shadow-lg py-2 z-50"
-                tabIndex={-1}
-              >
-                {isLoadingUser ? (
+              <div className="absolute right-0 mt-2 w-48 bg-white border border-blue-200 rounded-lg shadow-lg py-2 z-50" tabIndex={-1}>
+                {status === "loading" ? (
                   <div className="px-4 py-2 text-blue-900">Yükleniyor...</div>
+                ) : session?.user ? (
+                  <>
+                    {session.user.role === "ADMIN" && (
+                      <Link href="/admin" className="block px-4 py-2 text-blue-900 font-semibold hover:bg-blue-50 transition-colors">Admin Paneli</Link>
+                    )}
+                    {session.user.role === "USER" && (
+                      <Link href="/profile" className="block px-4 py-2 text-blue-900 font-semibold hover:bg-blue-50 transition-colors">Profilim</Link>
+                    )}
+                    <button
+                      onClick={() => signOut({ callbackUrl: "/" })}
+                      className="block w-full text-left px-4 py-2 text-blue-900 font-semibold hover:bg-blue-50 transition-colors"
+                    >
+                      Çıkış Yap
+                    </button>
+                  </>
                 ) : (
                   <>
-                    {!user && (
-                      <>
-                        <Link href="/login" className="block px-4 py-2 text-blue-900 font-semibold hover:bg-blue-50 transition-colors">Giriş Yap</Link>
-                        <Link href="/register" className="block px-4 py-2 text-blue-900 font-semibold hover:bg-blue-50 transition-colors">Kayıt Ol</Link>
-                      </>
-                    )}
-                    {user && (
-                      <>
-                        {user.role === "ADMIN" && (
-                          <Link href="/admin" className="block px-4 py-2 text-blue-900 font-semibold hover:bg-blue-50 transition-colors">Admin Paneli</Link>
-                        )}
-                        {user.role === "USER" && (
-                          <Link href="/profile" className="block px-4 py-2 text-blue-900 font-semibold hover:bg-blue-50 transition-colors">Profilim</Link>
-                        )}
-                        <Link href="/logout" className="block px-4 py-2 text-blue-900 font-semibold hover:bg-blue-50 transition-colors">Çıkış Yap</Link>
-                      </>
-                    )}
+                    <Link href="/login" className="block px-4 py-2 text-blue-900 font-semibold hover:bg-blue-50 transition-colors">Giriş Yap</Link>
+                    <Link href="/register" className="block px-4 py-2 text-blue-900 font-semibold hover:bg-blue-50 transition-colors">Kayıt Ol</Link>
                   </>
                 )}
               </div>
@@ -114,4 +82,4 @@ export default function Header() {
       </nav>
     </header>
   );
-} 
+}
