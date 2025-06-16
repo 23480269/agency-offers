@@ -31,9 +31,9 @@ export default function Header() {
   return (
     <header className="w-full bg-white shadow-sm sticky top-0 z-50 border-b border-blue-50">
       <nav className="max-w-5xl mx-auto flex items-center justify-between px-4 py-4">
-        <Link href="/" className="flex items-center gap-2 text-3xl font-extrabold text-blue-950 no-underline hover:no-underline">
+        <Link href="/" className="flex items-center gap-2 group">
           <Image src="/3C_logo.png" alt="3C Dijital Logo" width={40} height={40} className="rounded-full" />
-          3C Dijital
+          <span className="font-bold text-xl text-blue-900 group-hover:text-blue-700 transition-colors">3C Dijital</span>
         </Link>
         <div className="flex gap-6 items-center">
           <Link href="/" className="hover:text-blue-700 font-bold text-blue-900 transition-colors">Ana Sayfa</Link>

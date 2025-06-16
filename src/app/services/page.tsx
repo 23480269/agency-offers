@@ -131,7 +131,28 @@ export default function ServicesPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Telefon</label>
-                  <input type="tel" required value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+                  <input
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={e => {
+                      let val = e.target.value.replace(/[^0-9 ]/g, '');
+                      if (val.startsWith('0')) val = val.slice(1);
+                      val = val.replace(/(\d{3})(\d{0,3})(\d{0,2})(\d{0,2})/, (m, g1, g2, g3, g4) => {
+                        let out = g1;
+                        if (g2) out += ' ' + g2;
+                        if (g3) out += ' ' + g3;
+                        if (g4) out += ' ' + g4;
+                        return out.trim();
+                      });
+                      setFormData({ ...formData, phone: val });
+                    }}
+                    pattern="5[0-9]{2} [0-9]{3} [0-9]{2} [0-9]{2}"
+                    maxLength={13}
+                    minLength={13}
+                    placeholder="5xx xxx xx xx"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Şirket Adı</label>
