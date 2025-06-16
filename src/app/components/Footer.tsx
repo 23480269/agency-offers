@@ -6,8 +6,10 @@ export default function Footer() {
     <footer className="w-full bg-blue-950 text-white mt-16">
       <div className="max-w-5xl mx-auto px-4 py-12 flex flex-col sm:flex-row justify-between items-center sm:items-start gap-8">
         <div className="flex flex-col items-center sm:items-start">
-          <div className="flex items-center gap-2 mb-2">
-            <Image src="/3C_logo.png" alt="3C Dijital Logo" width={40} height={40} className="rounded-full" />
+          <div className="flex items-center gap-2 mb-2 min-w-[48px] min-h-[48px]">
+            <div className="relative w-12 h-12">
+              <Image src="/3C_logo.png" alt="3C Dijital Logo" fill style={{objectFit:'contain'}} className="rounded-full" />
+            </div>
             <div className="flex flex-col leading-none">
               <span className="text-2xl font-bold text-red-500">3C</span>
               <span className="text-xl font-bold text-white">Dijital</span>
