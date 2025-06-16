@@ -27,8 +27,7 @@ export default function LoginPage() {
     });
     if (res?.ok) {
       setMessage("Başarıyla giriş yapıldı, yönlendiriliyorsunuz...");
-      router.replace("/");
-      router.refresh();
+      window.location.href = "/";
     } else {
       setError("Giriş başarısız");
     }
