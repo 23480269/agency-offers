@@ -104,22 +104,29 @@ export default function AdminUsersPage() {
                   <td className="py-2.5 px-4">{user.email}</td>
                   <td className="py-2.5 px-4 text-center">
                     {user.role}
-                    {console.log("User ID:", user.id, "Current User ID:", currentUserId, "Match:", user.id === currentUserId)}
-                    {user.id !== currentUserId && user.role !== "ADMIN" && (
-                      <button
-                        className="ml-2 bg-yellow-600 text-white px-3 py-1.5 rounded-md hover:bg-yellow-700 transition shadow-sm"
-                        onClick={() => handleRoleChange(user.id, "ADMIN")}
-                      >
-                        Admin Yap
-                      </button>
+                    {/* Admin de dahil tüm kullanıcılar listelenir, ancak sadece kendi dışındaki kullanıcıların rolü değiştirilebilir */}
+                    {user.id !== currentUserId && (
+                      <>
+                        {user.role !== "ADMIN" && (
+                          <button
+                            className="ml-2 bg-yellow-600 text-white px-3 py-1.5 rounded-md hover:bg-yellow-700 transition shadow-sm"
+                            onClick={() => handleRoleChange(user.id, "ADMIN")}
+                          >
+                            Admin Yap
+                          </button>
+                        )}
+                        {user.role !== "USER" && (
+                          <button
+                            className="ml-2 bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-700 transition shadow-sm"
+                            onClick={() => handleRoleChange(user.id, "USER")}
+                          >
+                            Kullanıcı Yap
+                          </button>
+                        )}
+                      </>
                     )}
-                    {user.id !== currentUserId && user.role !== "USER" && (
-                      <button
-                        className="ml-2 bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-700 transition shadow-sm"
-                        onClick={() => handleRoleChange(user.id, "USER")}
-                      >
-                        Kullanıcı Yap
-                      </button>
+                    {user.id === currentUserId && (
+                      <span className="ml-2 text-xs text-gray-400">(Kendi hesabınız)</span>
                     )}
                   </td>
                   <td className="py-2.5 px-4">{new Date(user.createdAt).toLocaleString()}</td>
@@ -141,4 +148,4 @@ export default function AdminUsersPage() {
       </div>
     </div>
   );
-} 
+}

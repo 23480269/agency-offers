@@ -73,3 +73,15 @@ model ContactMessage {
   message   String
   createdAt DateTime @default(now())
 }
+
+model ServicePackage {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       String
+  description String
+  features    String[]
+  icon        String
+  cta         String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

@@ -1,4 +1,5 @@
-import { cookies } from "next/headers";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import React from "react";
 import { redirect } from "next/navigation";
@@ -11,21 +12,15 @@ export default async function ProfilePage({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const cookieStore = await cookies();
-  const userIdFromCookie = cookieStore.get("userId")?.value;
+  const session = await getServerSession(authOptions);
   const showOfferForm = searchParams.showOfferForm === "true";
 
-  console.log("ProfilePage server component: userIdFromCookie=", userIdFromCookie);
-
-  const userId = userIdFromCookie;
-
-  if (!userId) {
-    console.error("Invalid userId from cookie, redirecting to login:", userIdFromCookie);
+  if (!session?.user?.id) {
     redirect("/login");
   }
 
   const user = await prisma.user.findUnique({
-    where: { id: userId },
+    where: { id: session.user.id },
     select: { id: true, name: true, email: true, role: true, createdAt: true },
   });
 

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface ContactMessage {
   id: number;
@@ -16,27 +17,17 @@ export default function AdminContactMessagesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await fetch("/api/auth-status", { credentials: "include" });
-        const data = await res.json();
-        
-        if (!data.isAuthenticated || data.userRole !== "ADMIN") {
-          router.push("/login");
-          return;
-        }
-        
-        fetchMessages();
-      } catch (error) {
-        console.error("Auth check error:", error);
-        router.push("/login");
-      }
-    };
-
-    checkAuth();
-  }, [router]);
+    if (status === "loading") return;
+    if (!session?.user || session.user.role !== "ADMIN") {
+      router.replace("/login");
+      return;
+    }
+    fetchMessages();
+    // eslint-disable-next-line
+  }, [session, status, router]);
 
   const fetchMessages = async () => {
     try {
