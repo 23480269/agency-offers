@@ -105,13 +105,13 @@ export default function ServicesPage() {
       </div>
       {/* Offer Form Modal */}
       {selectedPackage && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl p-8 max-w-md w-full">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-75 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl p-8 max-w-md w-full relative">
+            <div className="flex flex-col items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center break-words">
                 {packages.find((p) => p.name === selectedPackage)?.name || selectedPackage} için Teklif Al
               </h2>
-              <button onClick={() => setSelectedPackage(null)} className="text-gray-500 hover:text-gray-700">✕</button>
+              <button onClick={() => setSelectedPackage(null)} className="absolute right-4 top-4 text-gray-500 hover:text-gray-700 text-2xl">✕</button>
             </div>
             {submitStatus === "success" ? (
               <div className="text-center py-8">
