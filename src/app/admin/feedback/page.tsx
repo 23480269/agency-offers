@@ -20,7 +20,7 @@ export default function AdminContactMessagesPage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("/api/auth-status");
+        const res = await fetch("/api/auth-status", { credentials: "include" });
         const data = await res.json();
         
         if (!data.isAuthenticated || data.userRole !== "ADMIN") {
