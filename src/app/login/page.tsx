@@ -47,10 +47,10 @@ export default function LoginPage() {
         </form>
         {message && <div className="mt-4 text-green-700 font-semibold p-3 rounded-md shadow-sm">{message}</div>}
         {error && <div className="mt-4 text-red-600 font-semibold p-3 rounded-md shadow-sm">{error}</div>}
-      </div>
-      <div className="max-w-md w-full p-8 bg-white/90 rounded-xl shadow-lg border border-blue-100 mt-4 text-center">
-        <span>Hesabınız yok mu? </span>
-        <a href="/register" className="text-blue-700 font-semibold hover:underline">Kayıt Ol</a>
+        <div className="mt-6 text-center">
+          <span className="text-gray-500">Hesabınız yok mu? </span>
+          <a href="/register" className="text-blue-700 font-semibold hover:underline">Kayıt Ol</a>
+        </div>
       </div>
     </div>
   );
