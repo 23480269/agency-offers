@@ -3,7 +3,6 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import React from "react";
 import { redirect } from "next/navigation";
-import OfferForm from "./OfferForm";
 import OfferList from "./OfferList";
 import ProfileForm from "./ProfileForm";
 
@@ -42,7 +41,6 @@ export default async function ProfilePage({
       <ProfileForm initialName={user.name} initialEmail={user.email} userId={user.id} />
       {/* <ChatList /> */}
       <hr className="my-10 border-blue-200" />
-      <OfferForm userId={user.id} defaultOpen={showOfferForm} />
       <OfferList userId={user.id} />
     </div>
   );
