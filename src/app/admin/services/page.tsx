@@ -3,46 +3,45 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-interface Service {
-  id: string;
+interface ServicePackage {
+  id: number;
   name: string;
-  price: number;
+  price: string;
   description: string;
-  categoryId: string;
-  category?: { name: string };
+  features: string;
+  icon: string;
+  cta: string;
 }
 
 export default function AdminServicesPage() {
   const router = useRouter();
-  const [services, setServices] = useState<Service[]>([]);
+  const [packages, setPackages] = useState<ServicePackage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    // Load services for the admin page
-    const loadServices = async () => {
+    // Load service packages for the admin page
+    const loadPackages = async () => {
       try {
         const response = await fetch("/api/admin/services");
         const data = await response.json();
-        setServices(data);
+        setPackages(data);
       } catch (error) {
-        console.error("Error loading services:", error);
+        console.error("Error loading packages:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadServices();
+    loadPackages();
   }, []);
 
-  const handleServiceChange = (index: number, field: keyof Service, value: any) => {
-    const newServices = [...services];
-    if (field === "price") {
-      newServices[index][field] = parseFloat(value);
-    } else {
-      newServices[index][field] = value;
-    }
-    setServices(newServices);
+  const handlePackageChange = (index: number, field: keyof ServicePackage, value: any) => {
+    setPackages((prev) => {
+      const newPackages = [...prev];
+      newPackages[index] = { ...newPackages[index], [field]: value };
+      return newPackages;
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,18 +54,18 @@ export default function AdminServicesPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ services }),
+        body: JSON.stringify({ packages }),
       });
 
       if (response.ok) {
-        alert("Hizmetler başarıyla güncellendi!");
+        alert("Paketler başarıyla güncellendi!");
         router.refresh();
       } else {
         throw new Error("Güncelleme başarısız oldu");
       }
     } catch (error) {
-      console.error("Error saving services:", error);
-      alert("Hizmetler güncellenirken bir hata oluştu!");
+      console.error("Error saving packages:", error);
+      alert("Paketler güncellenirken bir hata oluştu!");
     } finally {
       setIsSaving(false);
     }
@@ -85,22 +84,22 @@ export default function AdminServicesPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Hizmetler Yönetimi</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Hizmet Paketleri Yönetimi</h1>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {services.map((service, index) => (
-            <div key={service.id} className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Hizmet {index + 1}</h2>
+          {packages.map((pkg, index) => (
+            <div key={pkg.id} className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Paket {index + 1}</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Hizmet Adı
+                    Paket Adı
                   </label>
                   <input
                     type="text"
-                    value={service.name}
-                    onChange={(e) => handleServiceChange(index, "name", e.target.value)}
+                    value={pkg.name}
+                    onChange={(e) => handlePackageChange(index, "name", e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -110,22 +109,34 @@ export default function AdminServicesPage() {
                     Fiyat
                   </label>
                   <input
-                    type="number"
-                    value={service.price}
-                    onChange={(e) => handleServiceChange(index, "price", e.target.value)}
+                    type="text"
+                    value={pkg.price}
+                    onChange={(e) => handlePackageChange(index, "price", e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Kategori
+                    İkon
                   </label>
                   <input
                     type="text"
-                    value={service.category?.name || service.categoryId}
-                    disabled
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                    value={pkg.icon}
+                    onChange={(e) => handlePackageChange(index, "icon", e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    CTA
+                  </label>
+                  <input
+                    type="text"
+                    value={pkg.cta}
+                    onChange={(e) => handlePackageChange(index, "cta", e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
 
@@ -134,10 +145,22 @@ export default function AdminServicesPage() {
                     Açıklama
                   </label>
                   <textarea
-                    value={service.description}
-                    onChange={(e) => handleServiceChange(index, "description", e.target.value)}
+                    value={pkg.description}
+                    onChange={(e) => handlePackageChange(index, "description", e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     rows={2}
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Özellikler (virgülle ayırın)
+                  </label>
+                  <input
+                    type="text"
+                    value={pkg.features}
+                    onChange={(e) => handlePackageChange(index, "features", e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
               </div>

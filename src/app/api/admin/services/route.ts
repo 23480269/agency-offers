@@ -3,35 +3,35 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    const services = await prisma.service.findMany({
-      include: { category: true },
+    const packages = await prisma.servicePackage.findMany({
       orderBy: { createdAt: "asc" },
     });
-    return NextResponse.json(services);
+    return NextResponse.json(packages);
   } catch (error) {
-    console.error("Error reading services:", error);
-    return NextResponse.json({ error: "Hizmetler okunamadı" }, { status: 500 });
+    console.error("Error reading service packages:", error);
+    return NextResponse.json({ error: "Paketler okunamadı" }, { status: 500 });
   }
 }
 
 export async function PUT(request: NextRequest) {
   try {
-    const { services } = await request.json();
-    // Her bir servisi güncelle
-    for (const service of services) {
-      await prisma.service.update({
-        where: { id: service.id },
+    const { packages } = await request.json();
+    for (const pkg of packages) {
+      await prisma.servicePackage.update({
+        where: { id: pkg.id },
         data: {
-          name: service.name,
-          description: service.description,
-          price: parseFloat(service.price),
-          categoryId: service.categoryId,
+          name: pkg.name,
+          description: pkg.description,
+          price: pkg.price,
+          features: pkg.features,
+          icon: pkg.icon,
+          cta: pkg.cta,
         },
       });
     }
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error updating services:", error);
-    return NextResponse.json({ error: "Hizmetler güncellenemedi" }, { status: 500 });
+    console.error("Error updating service packages:", error);
+    return NextResponse.json({ error: "Paketler güncellenemedi" }, { status: 500 });
   }
 }
