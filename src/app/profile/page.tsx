@@ -41,9 +41,9 @@ export default async function ProfilePage({
       <hr className="my-10 border-blue-200" />
       <ProfileForm initialName={user.name} initialEmail={user.email} userId={user.id} />
       {/* <ChatList /> */}
-      {/* <hr className="my-10 border-blue-200" />
+      <hr className="my-10 border-blue-200" />
       <OfferForm userId={user.id} defaultOpen={showOfferForm} />
-      <OfferList userId={user.id} /> */}
+      <OfferList userId={user.id} />
     </div>
   );
 }

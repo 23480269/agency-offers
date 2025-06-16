@@ -4,10 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface OfferFormProps {
+  userId: string;
   defaultOpen?: boolean;
 }
 
-export default function OfferForm({ defaultOpen = false }: OfferFormProps) {
+export default function OfferForm({ userId, defaultOpen = false }: OfferFormProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -20,6 +21,7 @@ export default function OfferForm({ defaultOpen = false }: OfferFormProps) {
     const data = {
       title: formData.get("title"),
       description: formData.get("description"),
+      userId,
     };
 
     try {
@@ -96,4 +98,4 @@ export default function OfferForm({ defaultOpen = false }: OfferFormProps) {
       )}
     </div>
   );
-} 
+}

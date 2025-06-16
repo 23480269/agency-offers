@@ -16,6 +16,7 @@ model User {
   password         String
   role             String      @default("USER")
   orders           Order[]
+  offers           Offer[]
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
 }
@@ -61,6 +62,8 @@ model Offer {
   message     String?
   packageName String
   status      String   @default("PENDING")
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 interface OfferListProps {
-  userId: number;
+  userId: string;
 }
 
 export default function OfferList({ userId }: OfferListProps) {
@@ -50,4 +50,4 @@ export default function OfferList({ userId }: OfferListProps) {
       )}
     </div>
   );
-} 
+}
