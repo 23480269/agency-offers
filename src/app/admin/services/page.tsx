@@ -50,7 +50,7 @@ export default function AdminServicesPage() {
 
     try {
       const response = await fetch("/api/admin/services", {
-        method: "PUT",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },

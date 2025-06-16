@@ -13,7 +13,7 @@ export async function GET() {
   }
 }
 
-export async function PUT(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     const { packages } = await request.json();
     for (const pkg of packages) {
