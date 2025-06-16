@@ -28,9 +28,10 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Kayıt sonrası kullanıcıyı login sayfasına yönlendir
-    return NextResponse.redirect("/login");
+    // Sadece başarılı mesajı dön, yönlendirmeyi frontend yapsın
+    return NextResponse.json({ success: true, message: "Kayıt başarılı! Lütfen giriş yapın." }, { status: 201 });
   } catch (error) {
+    console.error("Register error:", error);
     return NextResponse.json({ error: "Sunucu hatası." }, { status: 500 });
   }
 }
